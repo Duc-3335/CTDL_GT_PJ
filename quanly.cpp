@@ -6,13 +6,13 @@ using namespace std;
 // Định nghĩa cấu trúc hoạt động
 struct HoatDong
 {
-    unsigned int ID;
+    
     string Ten;
     time_t ThoiGianBatDau;
     string ThongTin;
     int MucDoUuTien;
-    HoatDong(int id, string ten, time_t tg, string tt, int mdut)
-        : ID(id), Ten(ten), ThoiGianBatDau(tg), ThongTin(tt), MucDoUuTien(mdut) {}
+    HoatDong(string ten, time_t tg, string tt, int mdut)
+        :  Ten(ten), ThoiGianBatDau(tg), ThongTin(tt), MucDoUuTien(mdut) {}
     bool operator<(const HoatDong &other) const
     {
 
@@ -36,9 +36,9 @@ int max(int a, int b);
 int min(int a, int b);
 Node *rightRotate(Node *y);
 Node *leftRotate(Node *x);
-void DeleteT(Node* &root, time_t tg);
-void DelNode(Node* &node);
-Node* CanBangCay(Node* root);
+void DeleteT(Node *&root, time_t tg);
+void DelNode(Node *&node);
+Node *CanBangCay(Node *root);
 void XuLyThoiGianTrung(Node *node);
 int LayHeSoCanBang(Node *n);
 HoatDong *TimHoatDongXayRaSomNhat(Node *node);
@@ -49,10 +49,10 @@ Node *insert(Node *node, HoatDong hd);
 
 int main()
 {
-    HoatDong hd1(555, "Bai thi toan", createTime(2024, 12, 23, 22, 0), "Thi cuoi ki mon toan", 1);
-    HoatDong hd2(666, "Hop nhom do an", createTime(2024, 12, 25, 8, 0), "Hop nhom ve do an", 2);
-    HoatDong hd3(777, "Le hoi van hoa", createTime(2024, 12, 15, 6, 0), "Le hoi tai truong", 3);
-    HoatDong hd4(888, "Di choi", createTime(2024, 12, 15, 6, 0), "Di choi voi gai", 4);
+    HoatDong hd1( "Bai thi toan", createTime(2024, 12, 23, 22, 0), "Thi cuoi ki mon toan", 1);
+    HoatDong hd2( "Hop nhom do an", createTime(2024, 12, 25, 8, 0), "Hop nhom ve do an", 2);
+    HoatDong hd3( "Le hoi van hoa", createTime(2024, 12, 15, 6, 0), "Le hoi tai truong", 3);
+    HoatDong hd4( "Di choi", createTime(2024, 12, 15, 6, 0), "Di choi voi gai", 4);
 
     Node *root = nullptr;
     root = insert(root, hd1);
@@ -62,7 +62,9 @@ int main()
     preOrder(root);
 
     XuLyThoiGianTrung(root);
-
+    cout<<"cac hoat dong phu hop";
+    cout << "\n";
+    preOrder(root);
     // Gọi hàm để tìm hoạt động xảy ra sớm nhất
     HoatDong *somNhat = TimHoatDongXayRaSomNhat(root);
     if (somNhat != nullptr)
@@ -74,7 +76,7 @@ int main()
     {
         cout << "Khong co hoat dong nao trong cay.\n";
     }
-    
+
     NhacNho(root, "Bai thi toan");
     NhacNho(root, "Hop nhom do an");
     NhacNho(root, "Di an sinh nhat ban");
@@ -120,7 +122,8 @@ Node *leftRotate(Node *x)
     return y;
 }
 
-void DeleteT(Node* &root, time_t tg) {
+void DeleteT(Node *&root, time_t tg)
+{
     if (root == nullptr)
         return;
 
@@ -129,23 +132,28 @@ void DeleteT(Node* &root, time_t tg) {
         DeleteT(root->left, tg);
     else if (tg > root->data.ThoiGianBatDau)
         DeleteT(root->right, tg);
-    else {
+    else
+    {
         // Tìm thấy node cần xóa
-        if (root->left == nullptr || root->right == nullptr) {
-            Node* temp = root->left ? root->left : root->right;
-
+        if (root->left == nullptr || root->right == nullptr)
+        {
+            Node *temp = root->left ? root->left : root->right;
             // Node không có con hoặc có một con
-            if (temp == nullptr) {
+            if (temp == nullptr)
+            {
                 temp = root;
                 root = nullptr;
-            } else {
+            }
+            else
+            {
                 *root = *temp; // Sao chép nội dung của node con lên node hiện tại
             }
-
             delete temp;
-        } else {
+        }
+        else
+        {
             // Node có hai con, tìm node nhỏ nhất bên phải
-            Node* temp = root->right;
+            Node *temp = root->right;
             while (temp->left != nullptr)
                 temp = temp->left;
 
@@ -167,12 +175,15 @@ void DeleteT(Node* &root, time_t tg) {
     // Kiểm tra và cân bằng cây sau khi xóa
     root = CanBangCay(root);
 }
-void DelNode(Node* &node) {
-    if (node != nullptr) {
+void DelNode(Node *&node)
+{
+    if (node != nullptr)
+    {
         DeleteT(node, node->data.ThoiGianBatDau);
     }
 }
-Node* CanBangCay(Node* root) {
+Node *CanBangCay(Node *root)
+{
     // Bước 1: Cập nhật chiều cao của node hiện tại
     root->do_cao = 1 + max(ChieuCao(root->left), ChieuCao(root->right));
 
@@ -186,7 +197,8 @@ Node* CanBangCay(Node* root) {
         return rightRotate(root);
 
     // Left Right
-    if (balance > 1 && LayHeSoCanBang(root->left) < 0) {
+    if (balance > 1 && LayHeSoCanBang(root->left) < 0)
+    {
         root->left = leftRotate(root->left);
         return rightRotate(root);
     }
@@ -196,14 +208,14 @@ Node* CanBangCay(Node* root) {
         return leftRotate(root);
 
     // Right Left
-    if (balance < -1 && LayHeSoCanBang(root->right) > 0) {
+    if (balance < -1 && LayHeSoCanBang(root->right) > 0)
+    {
         root->right = rightRotate(root->right);
         return leftRotate(root);
     }
 
     return root;
 }
-
 
 // Lấy hệ số cân bằng của cây
 int LayHeSoCanBang(Node *n)
@@ -216,24 +228,24 @@ Node *insert(Node *node, HoatDong hd)
 {
     if (node == nullptr)
         return new Node(hd);
-    if (hd.ID < node->data.ID)
+    if (hd.ThoiGianBatDau < node->data.ThoiGianBatDau)
         node->left = insert(node->left, hd);
-    else if (hd.ID > node->data.ID)
+    else if (hd.ThoiGianBatDau > node->data.ThoiGianBatDau)
         node->right = insert(node->right, hd);
     else
         return node;
     node->do_cao = 1 + max(ChieuCao(node->left), ChieuCao(node->right));
     int balance = LayHeSoCanBang(node);
-    if (balance > 1 && hd.ID < node->left->data.ID)
+    if (balance > 1 && hd.ThoiGianBatDau < node->left->data.ThoiGianBatDau)
         return rightRotate(node);
-    if (balance < -1 && hd.ID > node->right->data.ID)
+    if (balance < -1 && hd.ThoiGianBatDau > node->right->data.ThoiGianBatDau)
         return leftRotate(node);
-    if (balance > 1 && hd.ID > node->left->data.ID)
+    if (balance > 1 && hd.ThoiGianBatDau > node->left->data.ThoiGianBatDau)
     {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
-    if (balance < -1 && hd.ID < node->right->data.ID)
+    if (balance < -1 && hd.ThoiGianBatDau < node->right->data.ThoiGianBatDau)
     {
         node->right = rightRotate(node->right);
         return leftRotate(node);
@@ -251,10 +263,10 @@ void XuLyThoiGianTrung(Node *node)
     {
         cout << "Xung dot giua \"" << node->left->data.Ten << "\" va \"" << node->data.Ten << "\"\n";
         if (node->left->data.MucDoUuTien > node->data.MucDoUuTien)
-           // cout << "Huy su kien \"" << node->left->data.Ten << "\"\n";
+            // cout << "Huy su kien \"" << node->left->data.Ten << "\"\n";
             DelNode(node->left);
         else
-          //  cout << "Huy su kien \"" << node->data.Ten << "\"\n";
+            //  cout << "Huy su kien \"" << node->data.Ten << "\"\n";
             DelNode(node);
     }
 
@@ -296,7 +308,7 @@ void preOrder(Node *node)
 {
     if (node != nullptr)
     {
-        cout << node->data.ID << " : " << node->data.Ten << " : " << ctime(&node->data.ThoiGianBatDau);
+        cout << node->data.Ten << " : " << ctime(&node->data.ThoiGianBatDau);
         preOrder(node->left);
         preOrder(node->right);
     }
@@ -352,4 +364,3 @@ time_t createTime(int year, int month, int day, int hour, int min)
 }
 
 // Chương trình chính
-
