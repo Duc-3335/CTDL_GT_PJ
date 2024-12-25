@@ -263,9 +263,11 @@ void XuLyThoiGianTrung(Node *node)
     {
         cout << "Xung dot giua \"" << node->right->data.Ten << "\" va \"" << node->data.Ten << "\"\n";
         if (node->right->data.MucDoUuTien > node->data.MucDoUuTien)
-            cout << "Huy su kien \"" << node->right->data.Ten << "\"\n";
+           // cout << "Huy su kien \"" << node->right->data.Ten << "\"\n";
+            DelNode(node->right);
         else
-            cout << "Huy su kien \"" << node->data.Ten << "\"\n";
+           // cout << "Huy su kien \"" << node->data.Ten << "\"\n";
+           DelNode(node);
     }
     XuLyThoiGianTrung(node->left);
     XuLyThoiGianTrung(node->right);
