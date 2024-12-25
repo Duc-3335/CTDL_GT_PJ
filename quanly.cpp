@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-#include <queue>
 using namespace std;
 // Định nghĩa cấu trúc hoạt động
 struct HoatDong
@@ -53,12 +52,13 @@ int main()
     HoatDong hd2( "Hop nhom do an", createTime(2024, 12, 25, 8, 0), "Hop nhom ve do an", 2);
     HoatDong hd3( "Le hoi van hoa", createTime(2024, 12, 15, 6, 0), "Le hoi tai truong", 3);
     HoatDong hd4( "Di choi", createTime(2024, 12, 15, 6, 0), "Di choi voi gai", 4);
-
+    HoatDong hd5( "Di an", createTime(2024, 12, 30, 6, 0), "di an", 4);
     Node *root = nullptr;
     root = insert(root, hd1);
     root = insert(root, hd2);
     root = insert(root, hd3);
     root = insert(root, hd4);
+    root = insert(root, hd5);
     preOrder(root);
 
     XuLyThoiGianTrung(root);
