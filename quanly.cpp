@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <queue>
 using namespace std;
 // Định nghĩa cấu trúc hoạt động
 struct HoatDong
@@ -43,22 +44,21 @@ int LayHeSoCanBang(Node *n);
 HoatDong *TimHoatDongXayRaSomNhat(Node *node);
 void preOrder(Node *node);
 time_t createTime(int year, int month, int day, int hour, int min);
-void NhacNho(Node *root, const string &ten);
+void NhacNho(Node *root, const string t);
 Node *insert(Node *node, HoatDong hd);
 
 int main()
 {
-    HoatDong hd1( "Bai thi toan", createTime(2024, 12, 23, 22, 0), "Thi cuoi ki mon toan", 1);
+    HoatDong hd1( "Bai thi toan", createTime(2024, 12, 26, 22, 0), "Thi cuoi ki mon toan", 1);
     HoatDong hd2( "Hop nhom do an", createTime(2024, 12, 25, 8, 0), "Hop nhom ve do an", 2);
-    HoatDong hd3( "Le hoi van hoa", createTime(2024, 12, 15, 6, 0), "Le hoi tai truong", 3);
+    HoatDong hd3( "Le hoi van hoa", createTime(2024, 12, 22, 6, 0), "Le hoi tai truong", 3);
     HoatDong hd4( "Di choi", createTime(2024, 12, 15, 6, 0), "Di choi voi gai", 4);
-    HoatDong hd5( "Di an", createTime(2024, 12, 30, 6, 0), "di an", 4);
+
     Node *root = nullptr;
     root = insert(root, hd1);
     root = insert(root, hd2);
     root = insert(root, hd3);
     root = insert(root, hd4);
-    root = insert(root, hd5);
     preOrder(root);
 
     XuLyThoiGianTrung(root);
@@ -76,10 +76,12 @@ int main()
     {
         cout << "Khong co hoat dong nao trong cay.\n";
     }
+    time_t now = time(0);
+cout << "Thoi gian hien tai: " << ctime(&now) << endl;
 
-    NhacNho(root, "Bai thi toan");
+   NhacNho(root, "Bai thi toan");
     NhacNho(root, "Hop nhom do an");
-    NhacNho(root, "Di an sinh nhat ban");
+   NhacNho(root, "Di an sinh nhat ban");
     return 0;
 }
 
@@ -312,43 +314,40 @@ void preOrder(Node *node)
         preOrder(node->left);
         preOrder(node->right);
     }
-}
+} 
 
 // nhac nho su kien
-void NhacNho(Node *root, const string &ten)
+void NhacNho(Node *root, const string t)
 {
-    if (!root)
-    {
-        cout << "khong tim thay hoat dong \"" << ten << "\".\n";
+    if (root == nullptr)
         return;
-    }
 
-    // Duyệt cây để tìm hoạt động theo tên
-    if (root->data.Ten == ten)
+    // Kiểm tra tên hoạt động
+    if (root->data.Ten == t)
     {
         time_t currentTime = time(0); // Thời gian hiện tại
         double secondsLeft = difftime(root->data.ThoiGianBatDau, currentTime);
 
         if (secondsLeft > 0)
         {
-            cout << "Nhac nho hoat dong: \"" << ten << "\" se dien ra trong "
-                 << secondsLeft / 60 << " phut.\n";
+            cout << "Nhac nho: Hoat dong \"" << t << "\" se dien ra sau " 
+                 << secondsLeft / 60 << " phut (" 
+                 << ctime(&root->data.ThoiGianBatDau) << ")\n";
         }
         else
         {
-            cout << "Hoat dong \"" << ten << "\" da ket thuc.\n";
+            cout << "Hoat dong \"" << t << "\" da ket thuc vao " 
+                 << ctime(&root->data.ThoiGianBatDau) << "\n";
         }
         return;
     }
-    if (ten != root->data.Ten)
-    {
-        NhacNho(root->left, ten);
-    }
-    else
-    {
-        NhacNho(root->right, ten);
-    }
+
+    // Duyệt cả hai nhánh để tìm hoạt động
+    NhacNho(root->left, t);
+    NhacNho(root->right, t);
 }
+
+
 
 // Hàm tạo thời gian
 time_t createTime(int year, int month, int day, int hour, int min)
@@ -363,4 +362,4 @@ time_t createTime(int year, int month, int day, int hour, int min)
     return mktime(&t);
 }
 
-// Chương trình chính
+
