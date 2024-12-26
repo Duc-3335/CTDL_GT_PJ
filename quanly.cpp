@@ -254,7 +254,7 @@ Node *insert(Node *node, HoatDong hd)
     }
     return node;
 }
-// xu ly thoi gian trung nhau140105
+// xu ly thoi gian trung nhau
 void XuLyThoiGianTrung(Node *node)
 {
     if (node == nullptr)
@@ -293,17 +293,14 @@ HoatDong *TimHoatDongXayRaSomNhat(Node *node)
     if (node == nullptr)
         return nullptr;
 
-    HoatDong *left = TimHoatDongXayRaSomNhat(node->left);
-    HoatDong *right = TimHoatDongXayRaSomNhat(node->right);
-
-    HoatDong *minHoatDong = &node->data;
-    if (left && left->ThoiGianBatDau < minHoatDong->ThoiGianBatDau)
-        minHoatDong = left;
-    if (right && right->ThoiGianBatDau < minHoatDong->ThoiGianBatDau)
-        minHoatDong = right;
-
-    return minHoatDong;
+    Node *current = node;
+    while (current->left != nullptr)
+    {
+        current = current->left;
+    }
+    return &current->data;
 }
+
 
 // Duyệt cây theo thứ tự trước
 void preOrder(Node *node)
